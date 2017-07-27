@@ -18,7 +18,21 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('widgets_nl_doctrine_encryption');
+        $rootNode    = $treeBuilder->root('widgetsnl');
+
+        $rootNode
+            ->children()
+            ->arrayNode('doctrine_encryptor')
+            ->children()
+            ->scalarNode('secret_key')
+            ->end()
+            ->scalarNode('algorithm')
+            ->defaultValue('WidgetsNL\\DoctrineEncryptionBundle\\Algorithm\\Aes256Cbc')
+            ->end()
+            ->end()
+            ->end();
+
+
         return $treeBuilder;
     }
 }

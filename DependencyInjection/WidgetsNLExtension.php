@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class WidgetsNLDoctrineEncryptionExtension extends Extension
+class WidgetsNLExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -24,5 +24,9 @@ class WidgetsNLDoctrineEncryptionExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+    public function getAlias()
+    {
+        return 'widgetsnl';
     }
 }

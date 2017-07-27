@@ -1,13 +1,11 @@
 {
-    "name": "WidgetsNL/DoctrineEncryptionBundle",
+    "name": "WidgetsNL/doctrine-encryption-bundle",
     "type": "library",
     "keywords": ["doctrine", "symfony", "aes256", "rijndael", "encrypt", "decrypt"],
     "license": "MIT",
     "description": "Add Encryption to specific Doctrine fields",
     "require": {
-        "php": ">=7.0",
-        "symfony/framework-bundle": ">=2.5",
-        "doctrine/orm": ">=2.5"
+        "php": ">=7.0"
     },
     "autoload": {
         "psr-0": { "WidgetsNL\\DoctrineEncryptionBundle": "" }
