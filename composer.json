@@ -1,5 +1,5 @@
 {
-    "name": "WidgetsNL/doctrine-encryption-bundle",
+    "name": "widgets-nl/doctrine-encryption-bundle",
     "type": "library",
     "keywords": ["doctrine", "symfony", "aes256", "rijndael", "encrypt", "decrypt"],
     "license": "MIT",
