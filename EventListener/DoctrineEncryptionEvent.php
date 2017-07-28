@@ -4,7 +4,7 @@ namespace WidgetsNL\DoctrineEncryptionBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\PreFlushEventArgs;
-use WidgetsNL\DoctrineEncryptionBundle\Algorithm\Aes256Cbc;
+use WidgetsNL\DoctrineEncryptionBundle\Algorithm\Aes;
 use WidgetsNL\DoctrineEncryptionBundle\Mapping\Encrypt;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -31,7 +31,7 @@ class DoctrineEncryptionEvent implements EventSubscriber
     public function __construct(Reader $annReader)
     {
         $this->annReader = $annReader;
-        $this->algoritm  = new Aes256Cbc('random');
+        $this->algoritm  = new Aes('random');
     }
 
 

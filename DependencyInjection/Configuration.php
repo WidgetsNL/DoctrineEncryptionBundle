@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('secret_key')
             ->end()
             ->scalarNode('algorithm')
-            ->defaultValue('WidgetsNL\\DoctrineEncryptionBundle\\Algorithm\\Aes256Cbc')
+            ->defaultValue('WidgetsNL\\DoctrineEncryptionBundle\\Algorithm\\Aes')
             ->end()
             ->end()
             ->end();

@@ -10,7 +10,6 @@
     "autoload": {
         "psr-0": { "WidgetsNL\\DoctrineEncryptionBundle": "" }
     },
-    "target-dir": "WidgetsNL/DoctrineEncryptionBundle",
     "authors": [
         {
             "name": "Arto Rozenga",

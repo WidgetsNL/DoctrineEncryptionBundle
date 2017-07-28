@@ -2,10 +2,12 @@
 
 namespace WidgetsNL\DoctrineEncryptionBundle\Algorithm;
 
-class Aes256Cbc
+class Aes
 {
     private $key;
-    const CIPHER_METHOD = 'aes-256-cbc';
+    private $cipher_method;
+    const CIPHER_MODE = 'cbc';
+    const KEY_SIZE = 256;
 
     /**
      * Aes256Cbc constructor.
@@ -15,19 +17,20 @@ class Aes256Cbc
     public function __construct($key)
     {
         $this->key = $key;
+        $this->cipher_method = 'aes-' . self::KEY_SIZE . '-' . self::CIPHER_MODE;
     }
 
     public function encrypt($payload)
     {
-        $iv        = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
-        $encrypted = openssl_encrypt($payload, self::CIPHER_METHOD, $this->key, 0, $iv);
+        $iv        = openssl_random_pseudo_bytes(openssl_cipher_iv_length($this->cipher_method));
+        $encrypted = openssl_encrypt($payload, $this->cipher_method, $this->key, 0, $iv);
 
         return base64_encode($iv . $encrypted);
     }
 
     public function decrypt($payload)
     {
-        $cipher_length = openssl_cipher_iv_length(self::CIPHER_METHOD);
+        $cipher_length = openssl_cipher_iv_length($this->cipher_method);
         $iv            = substr(base64_decode($payload), 0, $cipher_length);
         $data          = substr(base64_decode($payload), $cipher_length);
         if( strlen($iv) != $cipher_length ) {
@@ -35,6 +38,6 @@ class Aes256Cbc
             return $payload;
         }
 
-        return openssl_decrypt($data, self::CIPHER_METHOD, $this->key, 0, $iv);
+        return openssl_decrypt($data, $this->cipher_method, $this->key, 0, $iv);
     }
 }
