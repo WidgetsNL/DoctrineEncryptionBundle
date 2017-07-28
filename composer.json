@@ -8,7 +8,7 @@
         "php": ">=7.0"
     },
     "autoload": {
-        "psr-0": { "WidgetsNL\\DoctrineEncryptionBundle": "" }
+        "psr-4": { "WidgetsNL\\DoctrineEncryptionBundle\\": "" }
     },
     "authors": [
         {
