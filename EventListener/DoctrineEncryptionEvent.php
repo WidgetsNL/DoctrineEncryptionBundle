@@ -3,6 +3,7 @@
 namespace WidgetsNL\DoctrineEncryptionBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use WidgetsNL\DoctrineEncryptionBundle\Algorithm\Aes;
 use WidgetsNL\DoctrineEncryptionBundle\Mapping\Encrypt;
@@ -44,6 +45,7 @@ class DoctrineEncryptionEvent implements EventSubscriber
     {
         return [
             Events::preFlush,
+            Events::postFlush,
             Events::postLoad,
         ];
     }
@@ -57,6 +59,14 @@ class DoctrineEncryptionEvent implements EventSubscriber
         $unitOfWork = $preFlushEventArgs->getEntityManager()->getUnitOfWork();
         foreach($unitOfWork->getScheduledEntityInsertions() as $entity) {
             $this->encrypt($entity);
+        }
+    }
+    public function postFlush(PostFlushEventArgs $postFlushEventArgs) {
+        $unitOfWork = $postFlushEventArgs->getEntityManager()->getUnitOfWork();
+        foreach($unitOfWork->getIdentityMap() as $identityMap) {
+            foreach ($identityMap as $entity){
+                $this->decrypt($entity);
+            }
         }
     }
 
