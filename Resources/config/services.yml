@@ -1,6 +1,6 @@
 services:
     widgetsnl.doctrine.encryption:
         class: WidgetsNL\DoctrineEncryptionBundle\EventListener\DoctrineEncryptionEvent
-        arguments: ["@annotation_reader"]
+        arguments: ["@annotation_reader", WidgetsNL\DoctrineEncryptionBundle\Algorithm\Aes, "SomeRandomKey"]
         tags:
             -  { name: doctrine.event_subscriber }

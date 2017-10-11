@@ -4,4 +4,7 @@ namespace WidgetsNL\DoctrineEncryptionBundle\Mapping;
 /**
  * @Annotation
  */
-class Encrypt {}
+class Encrypt
+{
+
+}

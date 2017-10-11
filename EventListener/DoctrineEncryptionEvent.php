@@ -2,14 +2,14 @@
 
 namespace WidgetsNL\DoctrineEncryptionBundle\EventListener;
 
-use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\Event\PreFlushEventArgs;
-use WidgetsNL\DoctrineEncryptionBundle\Algorithm\Aes;
 use WidgetsNL\DoctrineEncryptionBundle\Mapping\Encrypt;
 use Doctrine\Common\Annotations\AnnotationException;
+use WidgetsNL\DoctrineEncryptionBundle\Exception\AlgorithmNotFoundException;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Events;
 use ReflectionClass;
 
@@ -28,10 +28,13 @@ class DoctrineEncryptionEvent implements EventSubscriber
      */
     private $algoritm;
 
-    public function __construct(Reader $annReader)
+    public function __construct(Reader $annReader, $algorithm, $key = null)
     {
         $this->annReader = $annReader;
-        $this->algoritm  = new Aes('random');
+        if (!class_exists($algorithm)) {
+            throw new AlgorithmNotFoundException();
+        }
+        $this->algoritm  = new $algorithm($key);
     }
 
 
@@ -53,9 +56,10 @@ class DoctrineEncryptionEvent implements EventSubscriber
         $this->decrypt($args->getEntity());
     }
 
-    public function preFlush(PreFlushEventArgs $preFlushEventArgs) {
+    public function preFlush(PreFlushEventArgs $preFlushEventArgs)
+    {
         $unitOfWork = $preFlushEventArgs->getEntityManager()->getUnitOfWork();
-        foreach($unitOfWork->getScheduledEntityInsertions() as $entity) {
+        foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
             $this->encrypt($entity);
         }
     }
@@ -88,7 +92,6 @@ class DoctrineEncryptionEvent implements EventSubscriber
         foreach ($fields as $field) {
             $this->decryptField($entity, $field);
         }
-
     }
 
     private function getEncryptProperties(ReflectionClass $reflectionClass)
@@ -100,10 +103,10 @@ class DoctrineEncryptionEvent implements EventSubscriber
             $hasAnnotation = $this->annReader->getPropertyAnnotation($property, self::ANNOTATION_CLASS);
             if ($hasAnnotation != null) {
                 $methodName = ucfirst($property->getName());
-                if ( ! $reflectionClass->hasMethod('get' . $methodName)) {
+                if (! $reflectionClass->hasMethod('get' . $methodName)) {
                     throw new AnnotationException('Can\'t use ' . self::ANNOTATION_CLASS . ' without getter function on ' . $reflectionClass->getName() . ':' . $property->getName());
                 }
-                if ( ! $reflectionClass->hasMethod('set' . $methodName)) {
+                if (! $reflectionClass->hasMethod('set' . $methodName)) {
                     throw new AnnotationException('Can\'t use ' . self::ANNOTATION_CLASS . ' without setter function on ' . $reflectionClass->getName() . ':' . $property->getName());
                 }
                 $fields[] = $property;
